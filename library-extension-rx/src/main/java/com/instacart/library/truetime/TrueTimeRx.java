@@ -1,6 +1,18 @@
 package com.instacart.library.truetime;
 
 import android.content.Context;
+
+import org.reactivestreams.Publisher;
+
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.FlowableEmitter;
@@ -11,15 +23,6 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
 import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import org.reactivestreams.Publisher;
 
 public class TrueTimeRx
       extends TrueTime {
@@ -197,9 +200,7 @@ public class TrueTimeRx
                                               o.onNext(requestTime(singleIpHostAddress));
                                               o.onComplete();
                                           } catch (IOException e) {
-                                              if (!o.isCancelled()) {
-                                                  o.onError(e);
-                                              }
+                                                  o.tryOnError(e);
                                           }
                                       }
                                   }, BackpressureStrategy.BUFFER)
